@@ -1,0 +1,22 @@
+Quantity,Reference(s),Value,Footprint,Notes
+7,C1 C3 C4 C5 C6 C9 C10,100n,Capacitor_THT:C_Disc_D4.3mm_W1.9mm_P5.00mm,
+2,C2 C11,1u,Capacitor_THT:CP_Radial_D5.0mm_P2.00mm,Schematic shows C11=100u
+2,C7 C8,10n,Capacitor_THT:C_Disc_D4.3mm_W1.9mm_P5.00mm,
+1,D1,Blue LED,EtherkitKicadLibrary:Kingbright_AA3528QBS_D09,
+1,D2,Red LED,LED_THT:LED_D5.0mm,
+1,J1,Key Jack,EtherkitKicadLibrary:Kycon_STX-3120-3B,
+1,J2,9V Batt,EtherkitKicadLibrary:Eagle_12BH611-GR,
+1,J3,Headphones,EtherkitKicadLibrary:Kycon_STX-3120-3B,
+2,Q1 Q3,2N7000,Package_TO_SOT_THT:TO-92_Inline,
+1,Q2,2N4401,Package_TO_SOT_THT:TO-92_Inline,
+2,R1 R3,10k,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,"Schematic shows R1=100k, R3=100k"
+4,R2 R5 R6 R7,3.3k,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,Schematic shows R6=330
+1,R4,47,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,
+2,R8 R13,4.7k,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,Schematic shows R13=10k
+1,R9,10k,EtherkitKicadLibrary:Piher_N6L25T3N-103-3030,
+2,R10 R11,100k,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,
+1,R12,27k,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,
+1,R14,2.2k,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,
+1,R15,4.3k,Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,
+1,SW1,Power Switch,EtherkitKicadLibrary:C&K_OS102011MS2QN1,
+1,U1,NE5532,Package_DIP:DIP-8_W7.62mm_LongPads,
