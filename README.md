@@ -43,9 +43,11 @@ NE5532 and fed to a 1/8" headphone jack.
    2021), not the current schematic. The `Notes` column flags every reference
    whose schematic value differs.
 2. Read `docs/REV-A-NOTES.md` before ordering parts. In particular, **C11 is
-   1 µF on the board but 100 µF in the schematic.** If your headphones are
-   low-impedance, 1 µF rolls off the bass at roughly 5 kHz — check this against
-   your intended load before building.
+   1 µF on the board but 100 µF in the schematic, and the schematic is the
+   correct value** — at 32 Ω the as-built 1 µF rolls off from ~5 kHz and costs
+   about 20 dB at the 480 Hz tone. Use 100 µF (or 47 µF) unless you specifically
+   intend high-impedance headphones. **R6 is the opposite case: the board's
+   3.3 kΩ is correct and the schematic's 330 Ω is the error.**
 3. The committed Gerbers and drill file regenerate exactly from
    `TwinTCPO.kicad_pcb`; they are safe to send to a fabricator as-is.
 4. The board has no mounting holes. Confirm your enclosure retains it.

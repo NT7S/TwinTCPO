@@ -29,10 +29,10 @@ reached the board — but that is unconfirmed.
 
 | Ref | Board (as built) | Schematic | Effect |
 |-----|------------------|-----------|--------|
-| C11 | 1 µF | 100 µF | Output coupling into headphones. 1 µF into 32 Ω gives a −3 dB corner near 5 kHz; 100 µF gives ~50 Hz. **Verify against the intended headphone impedance.** |
-| R6 | 3.3 kΩ | 330 Ω | Shunt leg of the keying twin-T. A 10× change alters notch depth and keying click/envelope. |
-| R1 | 10 kΩ | 100 kΩ | Q1 gate pull-down. Benign either way. |
-| R3 | 10 kΩ | 100 kΩ | Q1 drain pull-up driving Q3 gate. Benign; changes key-down current only. |
+| C11 | 1 µF | 100 µF | U1B output (pin 7) to J3. 1 µF into 32 Ω corners at **4.97 kHz**; 100 µF at **49.7 Hz**. If J3 parallels both earpieces (~16 Ω), the corner rises to ~10 kHz. **The as-built 1 µF attenuates the 480 Hz tone by roughly 20 dB** — the schematic's 100 µF (or 47 µF) is the correct value unless high-Z headphones were intended. |
+| R6 | 3.3 kΩ | 330 Ω | Shunt leg of the keying twin-T. The board's **3.3 kΩ is correct** — it matches R2/R7 (3.3 kΩ) and C1/C5 (100 nF). 330 Ω is 10× low and detunes the C-C branch upward: combined notch moves from ~0.4 kHz to ~0.8 kHz and rejection at 480 Hz drops from ~18 dB to ~15 dB. **The schematic's 330 Ω is the error here.** |
+| R1 | 10 kΩ | 100 kΩ | Pull-up to VCC (not a gate pull-down). Benign either way. |
+| R3 | 10 kΩ | 100 kΩ | Q3 gate pull-up — Q1 drain and Q3 gate are the same node. Benign; changes key-down current only. |
 | R13 | 4.7 kΩ | 10 kΩ | Red LED current, ~1.5 mA vs ~0.7 mA. Cosmetic. |
 
 `BOM.csv` uses the board values and flags each discrepancy in its `Notes` column.
@@ -40,19 +40,28 @@ reached the board — but that is unconfirmed.
 ## 3. No supply decoupling
 
 The VCC net has eight nodes — two LEDs, five resistors, the power switch, and
-U1 pin 8 — and **no capacitor to ground**. The NE5532 and the oscillator
-transistor share the raw 9 V rail. C2 (1 µF) is on the mid-rail bias/filter
-node, not the supply.
+U1 pin 8 — and **no capacitor to ground**.
 
-The board works, but supply impedance modulates the oscillator and keying
-transients ride the rail into both op-amp stages. A 100 nF in parallel with
-10 µF across VCC at U1 is the conventional fix and is recommended for rev B.
+Corrected node detail: **C2 is not on the mid-rail bias node.** C2 (1 µF) is the
+Q2 collector supply filter — VCC → R4 (47 Ω) → C2 → R5 (3.3 kΩ) → Q2 collector.
+The op-amp mid-rail is the R10/R11 (100 kΩ) divider with C6/C7 around it. So the
+oscillator transistor's collector *is* filtered, and the "shares the raw 9 V
+rail" framing was too strong — but VCC itself still has no capacitor, so U1
+sits directly on the battery rail.
+
+The board works, but supply impedance modulates U1 and keying transients ride
+the rail into both op-amp stages. A 100 nF close to U1 pin 8 plus 10 µF bulk
+near the supply entry is the conventional fix and is recommended for rev B. If
+the mid-rail wants stiffening too, add 10 µF across the R10/R11 divider.
 
 ## 4. No ground plane
 
-Zero copper zones. 184 track segments, all 0.5 mm wide. A bottom-side ground
-pour would improve noise performance and return-path impedance on an audio
-board this size, and would reduce etch cost. Recommended for rev B.
+Zero copper zones. 184 track segments, all 0.5 mm wide — fine for this current.
+A bottom-side ground pour is worth adding on rev B for return-path impedance and
+shielding, with two caveats: keep the pour out from under the high-impedance
+twin-T nodes and the op-amp feedback nodes, and stitch it to top-side ground.
+At 480 Hz the electrical benefit is modest, so treat this as good practice
+rather than a fix for a measured problem.
 
 ## 5. Layout and DFM observations
 
@@ -87,12 +96,14 @@ board this size, and would reduce etch cost. Recommended for rev B.
 
 ## Recommended actions before rev B
 
-1. Decide which revision is authoritative. If the schematic values are
-   intended, bump the schematic to rev B and re-run "Update PCB from
-   Schematic" and re-plot Gerbers. If not, revert the schematic to match the
-   board.
-2. Confirm C11 against the intended headphone load — this is the change with an
-   audible consequence.
-3. Add 100 nF + 10 µF decoupling at U1 and a ground pour.
+1. Resolve the five value mismatches individually — they do not all point the
+   same direction. **C11 and R6 are cases where the schematic is right and the
+   board is wrong**; R1, R3 and R13 are benign either way. Bump the schematic to
+   rev B for the C11/R6 changes and re-run "Update PCB from Schematic", then
+   re-plot Gerbers.
+2. Change C11 on the next spin to 100 µF (47 µF also works) unless high-Z
+   headphones were intended — as built, 1 µF costs roughly 20 dB at 480 Hz.
+3. Add 100 nF + 10 µF decoupling at U1, and a stitched bottom-side ground pour
+   kept clear of the twin-T and feedback nodes.
 4. Remove the `*-bak` files and the duplicate legacy schematic.
 5. Add PWR_FLAG symbols to VCC and GND so ERC is meaningful.
